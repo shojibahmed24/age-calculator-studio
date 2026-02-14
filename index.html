@@ -3,304 +3,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Smart Tools v3.2 Ultra</title>
+    <title>Smart All-in-One Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        
-        body { 
-            background-color: #f8fafc; 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            -webkit-tap-highlight-color: transparent; 
-            height: 100dvh; 
-            width: 100vw; 
+        :root { --bg-dark: #070b14; }
+        body {
+            background-color: var(--bg-dark);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: white;
+            height: 100dvh;
             overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
-
-        .premium-header {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(236, 72, 153, 0.25) 50%, rgba(251, 191, 36, 0.2) 100%), rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(30px) saturate(200%);
-            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-            position: relative;
+        /* Enhanced Safe Area Padding for Status Bar protection */
+        .safe-padding { 
+            padding-top: calc(env(safe-area-inset-top) + 32px); 
         }
-
-        .premium-text {
-            background: linear-gradient(to right, #4f46e5, #c026d3, #ea580c, #4f46e5);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient-text 4s linear infinite;
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
+        .tool-modal {
+            position: fixed; inset: 0; z-index: 100; 
+            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; flex-direction: column; overflow: hidden;
         }
-
-        @keyframes gradient-text {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        .bento-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-        }
-        .bento-card:active { transform: scale(0.94); opacity: 0.9; }
-
-        .safe-area-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem); }
-        .safe-area-top { padding-top: env(safe-area-inset-top); }
-        .hide-scroll::-webkit-scrollbar { display: none; }
-
-        .bmi-gauge-bar {
-            background: linear-gradient(to right, #60a5fa 0%, #34d399 25%, #34d399 50%, #fbbf24 75%, #f87171 100%);
-            height: 14px;
-            border-radius: 7px;
-            position: relative;
-        }
-        .bmi-marker { transition: left 0.5s ease-out; }
-
-        /* Custom Input Styling for better visibility */
-        input::placeholder {
-            color: rgba(100, 116, 139, 0.5);
-            font-weight: 500;
-        }
+        .tool-modal.open { transform: translateY(0); }
+        .bento-card { transition: all 0.3s ease; cursor: pointer; }
+        .bento-card:active { transform: scale(0.95); opacity: 0.8; }
+        .calc-btn { height: 60px; border-radius: 18px; font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: 0.1s; }
+        .calc-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.2); }
+        .unit-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; outline: none; text-align: center; font-size: 1.5rem; font-weight: 800; width: 100%; }
+        select { background: rgba(255,255,255,0.1); border: none; padding: 10px; border-radius: 10px; color: white; width: 100%; font-weight: bold; appearance: none; text-align-last: center; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .floating { animation: float 4s ease-in-out infinite; }
+        .creator-glow { text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
     </style>
 </head>
 <body class="flex flex-col">
 
-    <div id="app-container" class="flex-1 flex flex-col h-full">
-        
-        <header class="p-6 pb-6 premium-header safe-area-top z-30">
-            <div class="flex justify-between items-center">
-                <div class="space-y-0.5">
-                    <h1 class="text-2xl font-extrabold premium-text tracking-tighter">Smart Tools</h1>
-                    <p class="text-[9px] font-black uppercase tracking-[0.25em] text-slate-600 flex items-center">
-                        <span class="flex h-2 w-2 mr-2 bg-indigo-600 rounded-full animate-pulse"></span>
-                        ULTRA ENGINE v3.2
-                    </p>
-                </div>
-                <button onclick="window.showSettings()" class="w-11 h-11 bg-white shadow-xl shadow-indigo-100/50 rounded-2xl flex items-center justify-center border border-indigo-50 active:scale-90 transition">
-                    <i data-lucide="layout-grid" class="w-5 h-5 text-indigo-600"></i>
-                </button>
+    <!-- MAIN DASHBOARD -->
+    <div class="flex-1 flex flex-col h-full overflow-hidden">
+        <header class="p-6 safe-padding flex justify-between items-end bg-gradient-to-b from-black/20 to-transparent">
+            <div>
+                <h1 class="text-3xl font-black italic tracking-tighter bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">SMART TOOLS</h1>
+                <p class="text-[10px] font-bold opacity-40 uppercase tracking-[0.4em]">Premium Hybrid OS</p>
+            </div>
+            <div onclick="window.openTool('about')" class="w-12 h-12 glass rounded-2xl flex items-center justify-center floating active:scale-90 transition-transform cursor-pointer">
+                <i data-lucide="info" class="text-blue-400 w-5 h-5"></i>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-4 space-y-4 hide-scroll">
-            <div class="grid grid-cols-2 gap-4 pb-24">
-                <div onclick="window.showTool('calc')" class="bento-card col-span-1 h-44 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[38px] p-6 text-white flex flex-col justify-between shadow-xl">
-                    <div class="w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center"><i data-lucide="calculator" class="w-5 h-5"></i></div>
-                    <span class="font-bold text-lg">Calculator</span>
+        <main class="flex-1 overflow-y-auto px-6 pb-10 space-y-6">
+            <div class="grid grid-cols-2 gap-4">
+                <div onclick="window.openTool('calc')" class="bento-card h-40 bg-gradient-to-br from-slate-800 to-slate-950 rounded-[35px] p-6 shadow-2xl flex flex-col justify-between border border-white/5">
+                    <div class="w-10 h-10 bg-cyan-500/20 rounded-xl flex items-center justify-center"><i data-lucide="calculator" class="text-cyan-400"></i></div>
+                    <span class="font-black text-lg">Calculator</span>
                 </div>
-                <div onclick="window.showTool('notes')" class="bento-card col-span-1 h-44 bg-emerald-500 rounded-[38px] p-6 text-white flex flex-col justify-between shadow-xl">
-                    <div class="w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center"><i data-lucide="edit-3" class="w-5 h-5"></i></div>
-                    <span class="font-bold text-lg">Quick Notes</span>
+                <div onclick="window.openTool('unit')" class="bento-card h-40 bg-gradient-to-br from-indigo-600 to-blue-800 rounded-[35px] p-6 shadow-2xl flex flex-col justify-between">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center"><i data-lucide="refresh-cw" class="text-white"></i></div>
+                    <span class="font-black text-lg">Unit Conv</span>
                 </div>
-                <div onclick="window.showTool('unit')" class="bento-card col-span-2 h-36 bg-indigo-900 rounded-[40px] p-6 text-white flex items-center justify-between shadow-xl">
-                    <div class="flex flex-col"><span class="font-bold text-xl">Unit Switch</span><span class="text-white/60 text-xs">Universal Conversions Engine</span></div>
-                    <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center border border-white/20"><i data-lucide="refresh-cw" class="w-8 h-8"></i></div>
+                <div onclick="window.openTool('age')" class="bento-card h-40 bg-gradient-to-br from-orange-400 to-rose-600 rounded-[35px] p-6 shadow-2xl flex flex-col justify-between">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center"><i data-lucide="cake" class="text-white"></i></div>
+                    <span class="font-black text-lg">Age Calc</span>
                 </div>
-                <div onclick="window.showTool('bmi')" class="bento-card col-span-2 h-40 bg-gradient-to-r from-rose-600 via-pink-500 to-orange-500 rounded-[38px] p-6 text-white flex items-center justify-between shadow-xl shadow-rose-200/50">
-                    <div class="flex flex-col"><span class="font-bold text-2xl text-white">Health Analysis</span><span class="text-white/90 text-xs font-semibold">BMI & Advanced Metrics</span></div>
-                    <div class="w-16 h-16 bg-white/25 rounded-3xl flex items-center justify-center backdrop-blur-md border border-white/40"><i data-lucide="activity" class="w-8 h-8"></i></div>
+                <div onclick="window.openTool('pass')" class="bento-card h-40 bg-gradient-to-br from-emerald-500 to-teal-800 rounded-[35px] p-6 shadow-2xl flex flex-col justify-between">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center"><i data-lucide="shield" class="text-white"></i></div>
+                    <span class="font-black text-lg">Password</span>
                 </div>
-                <div onclick="window.showTool('time')" class="bento-card col-span-1 h-40 bg-amber-500 rounded-[38px] p-6 text-white flex flex-col justify-between shadow-xl">
-                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center"><i data-lucide="timer" class="w-5 h-5"></i></div>
-                    <span class="font-bold text-lg">Time Master</span>
+            </div>
+
+            <div class="p-6 glass rounded-[35px] bg-gradient-to-r from-purple-900/40 to-blue-900/40">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xs font-black text-purple-400 uppercase">Quick Actions</span>
+                    <i data-lucide="zap" class="w-4 h-4 text-yellow-400"></i>
                 </div>
-                <div onclick="window.showTool('pass')" class="bento-card col-span-1 h-40 bg-slate-800 rounded-[38px] p-6 text-white flex flex-col justify-between shadow-xl">
-                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
-                    <span class="font-bold text-lg">Vault Gen</span>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="window.openTool('notes')" class="py-4 glass rounded-2xl font-bold text-sm active:scale-95 transition-transform">Smart Notes</button>
+                    <button onclick="window.openTool('qr')" class="py-4 glass rounded-2xl font-bold text-sm active:scale-95 transition-transform">QR Creator</button>
                 </div>
             </div>
         </main>
+    </div>
 
-        <div id="tool-view" class="absolute inset-0 bg-slate-50 z-50 translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col">
-            <div class="p-4 flex items-center justify-between bg-white border-b safe-area-top">
-                <button onclick="window.closeTool()" class="p-3 bg-slate-100 rounded-2xl active:scale-90 transition">
-                    <i data-lucide="chevron-down" class="w-6 h-6 text-slate-800"></i>
-                </button>
-                <h2 id="tool-title" class="text-lg font-bold text-slate-800 tracking-tight">Tool</h2>
-                <div id="tool-actions"></div>
-            </div>
-            <div id="tool-content" class="flex-1 overflow-y-auto hide-scroll"></div>
+    <!-- MODAL ENGINE -->
+    <div id="tool-modal" class="tool-modal">
+        <div class="safe-padding px-6 flex items-center justify-between pb-4 bg-transparent">
+            <button onclick="window.closeTool()" class="w-12 h-12 glass rounded-2xl flex items-center justify-center active:scale-90 transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h2 id="modal-title" class="text-xl font-black italic uppercase">TOOL</h2>
+            <div class="w-12"></div>
         </div>
-
-        <div id="settings-view" class="absolute inset-0 bg-white z-[60] translate-x-full transition-transform duration-400 ease-out flex flex-col">
-            <div class="p-6 flex items-center justify-between border-b safe-area-top">
-                <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">System Info</h2>
-                <button onclick="window.closeSettings()" class="p-2 bg-slate-100 rounded-full"><i data-lucide="x" class="w-6 h-6 text-slate-600"></i></button>
-            </div>
-            <div class="p-6 space-y-6 flex-1 overflow-y-auto">
-                <div class="p-8 bg-slate-900 rounded-[40px] text-center">
-                    <div class="premium-text text-3xl font-black mb-1">SMART TOOLS</div>
-                    <p class="text-slate-500 text-[10px] font-bold tracking-[0.3em]">VERSION 3.2 ULTRA</p>
-                </div>
-            </div>
-        </div>
-
-        <footer class="bg-white border-t flex flex-col items-center justify-center safe-area-bottom">
-            <div class="w-full h-12 flex items-center justify-center">
-                <div class="text-[9px] text-slate-300 font-bold uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full">OneClick Studio Hybrid</div>
-            </div>
-        </footer>
+        <div id="modal-content" class="flex-1 flex flex-col p-6 overflow-hidden"></div>
     </div>
 
     <script>
-        let notes = JSON.parse(localStorage.getItem('smart_notes') || '[]');
-        let stopwatchInterval, swTime = 0;
-        let bmiSystem = 'metric';
+        let currentExpr = "0";
+        const units = {
+            length: { m: 1, km: 0.001, cm: 100, mm: 1000, inch: 39.37, ft: 3.28 },
+            weight: { kg: 1, g: 1000, lb: 2.204, oz: 35.27 },
+            temp: { c: 'c', f: 'f', k: 'k' }
+        };
 
-        window.onload = () => { lucide.createIcons(); };
-        window.vibrate = () => { if (window.navigator?.vibrate) window.navigator.vibrate(25); };
+        window.onload = () => lucide.createIcons();
+        window.vibrate = () => { if(window.navigator.vibrate) window.navigator.vibrate(10); };
 
-        window.showSettings = () => { window.vibrate(); document.getElementById('settings-view').classList.remove('translate-x-full'); };
-        window.closeSettings = () => { window.vibrate(); document.getElementById('settings-view').classList.add('translate-x-full'); };
-
-        window.showTool = (id) => {
+        window.openTool = (id) => {
             window.vibrate();
-            const view = document.getElementById('tool-view');
-            const content = document.getElementById('tool-content');
-            const title = document.getElementById('tool-title');
-            const actions = document.getElementById('tool-actions');
+            const modal = document.getElementById('tool-modal');
+            const content = document.getElementById('modal-content');
+            const title = document.getElementById('modal-title');
+            modal.className = "tool-modal open";
             
-            view.classList.remove('translate-y-full');
-            actions.innerHTML = '';
-            content.className = "flex-1 overflow-y-auto hide-scroll pb-10";
-
-            if (id === 'bmi') {
-                title.innerText = "Health Analysis";
-                content.classList.add('bg-gradient-to-b', 'from-rose-50', 'via-orange-50', 'to-white');
+            if (id === 'calc') {
+                modal.style.background = "#0f172a";
+                title.innerText = "Calculator";
                 content.innerHTML = `
-                <div class="p-6 space-y-8">
-                    <div class="flex bg-rose-200/30 p-2 rounded-3xl border border-rose-200/50 backdrop-blur-sm">
-                        <button onclick="window.setBMISystem('metric')" id="btn-metric" class="flex-1 py-4 rounded-2xl text-xs font-black tracking-widest transition-all bg-white shadow-lg text-rose-600">METRIC</button>
-                        <button onclick="window.setBMISystem('imperial')" id="btn-imperial" class="flex-1 py-4 rounded-2xl text-xs font-black tracking-widest transition-all text-slate-500">IMPERIAL</button>
+                    <div class="flex-1 flex flex-col h-full">
+                        <div class="flex-1 flex flex-col justify-end text-right px-4 pb-8">
+                            <div id="calc-disp" class="text-6xl font-light tracking-tighter truncate">0</div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-3 pb-4">
+                            <button onclick="window.handleCalc('C')" class="calc-btn bg-white/10 text-rose-400">C</button>
+                            <button onclick="window.handleCalc('/')" class="calc-btn bg-white/10 text-cyan-400">÷</button>
+                            <button onclick="window.handleCalc('*')" class="calc-btn bg-white/10 text-cyan-400">×</button>
+                            <button onclick="window.handleCalc('del')" class="calc-btn bg-white/10 text-rose-400">⌫</button>
+                            <button onclick="window.handleCalc('7')" class="calc-btn glass">7</button>
+                            <button onclick="window.handleCalc('8')" class="calc-btn glass">8</button>
+                            <button onclick="window.handleCalc('9')" class="calc-btn glass">9</button>
+                            <button onclick="window.handleCalc('-')" class="calc-btn bg-white/10 text-cyan-400">-</button>
+                            <button onclick="window.handleCalc('4')" class="calc-btn glass">4</button>
+                            <button onclick="window.handleCalc('5')" class="calc-btn glass">5</button>
+                            <button onclick="window.handleCalc('6')" class="calc-btn glass">6</button>
+                            <button onclick="window.handleCalc('+')" class="calc-btn bg-white/10 text-cyan-400">+</button>
+                            <button onclick="window.handleCalc('1')" class="calc-btn glass">1</button>
+                            <button onclick="window.handleCalc('2')" class="calc-btn glass">2</button>
+                            <button onclick="window.handleCalc('3')" class="calc-btn glass">3</button>
+                            <button onclick="window.handleCalc('=')" class="calc-btn row-span-2 bg-gradient-to-br from-cyan-400 to-blue-600 h-full">=</button>
+                            <button onclick="window.handleCalc('0')" class="calc-btn col-span-2 glass">0</button>
+                            <button onclick="window.handleCalc('.')" class="calc-btn glass">.</button>
+                        </div>
                     </div>
-
-                    <div id="bmi-inputs" class="grid grid-cols-2 gap-4"></div>
-
-                    <button onclick="window.calcBMI()" class="w-full py-6 bg-gradient-to-r from-rose-500 to-rose-600 rounded-[32px] text-white font-black text-lg shadow-2xl shadow-rose-200 active:scale-95 transition-all">Analyze Body Metrics</button>
-
-                    <div id="bmi-res-card" class="hidden p-10 rounded-[48px] border-2 bg-white/90 backdrop-blur-2xl text-center shadow-[0_32px_64px_-12px_rgba(244,63,94,0.15)] transition-all duration-700 transform scale-95">
-                        <div id="bmi-label" class="text-[11px] font-black uppercase tracking-[0.3em] mb-3 text-slate-400">Calculated Result</div>
-                        <div id="bmi-val" class="text-8xl font-black tracking-tighter leading-none">0.0</div>
-                        <div id="bmi-status" class="mt-6 inline-block px-6 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-widest text-white shadow-lg">HEALTHY</div>
-                        
-                        <div class="mt-10">
-                            <div class="bmi-gauge-bar shadow-inner">
-                                <div id="bmi-pointer" class="bmi-marker absolute -top-1.5 w-6 h-6 bg-white border-4 border-slate-900 rounded-full shadow-xl" style="left: 50%"></div>
+                `;
+                currentExpr = "0";
+            } else if (id === 'age') {
+                modal.style.background = "linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)";
+                title.innerText = "Age Calculator";
+                content.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="p-6 glass rounded-[30px] flex flex-col items-center">
+                            <label class="text-[10px] font-black uppercase opacity-60 mb-2">Birth Date</label>
+                            <input type="date" id="age-input" onchange="window.runAgeCalc()" class="bg-white/10 border-none outline-none p-4 rounded-2xl w-full text-center text-xl font-black text-white">
+                        </div>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="p-6 glass rounded-[30px] flex justify-between items-center">
+                                <span class="text-4xl font-black" id="res-y">0</span>
+                                <span class="text-xs font-bold opacity-70">YEARS</span>
                             </div>
-                            <div class="flex justify-between mt-4 text-[9px] font-black text-slate-400 px-1">
-                                <span>UNDER</span><span>NORMAL</span><span>OVER</span><span>OBESE</span>
+                            <div class="p-6 glass rounded-[30px] flex justify-between items-center">
+                                <span class="text-4xl font-black" id="res-m">0</span>
+                                <span class="text-xs font-bold opacity-70">MONTHS</span>
+                            </div>
+                            <div class="p-6 glass rounded-[30px] flex justify-between items-center">
+                                <span class="text-4xl font-black" id="res-d">0</span>
+                                <span class="text-xs font-bold opacity-70">DAYS</span>
                             </div>
                         </div>
                     </div>
-                </div>`;
-                window.setBMISystem('metric');
+                `;
             } else if (id === 'unit') {
-                title.innerText = "Universal Switch";
-                content.innerHTML = `<div class="p-6">Unit switch content...</div>`; // Placeholder
-            } else if (id === 'calc') {
-                title.innerText = "Smart Calculator";
-                content.innerHTML = `<div class="h-full bg-slate-950 p-6 flex flex-col justify-end">
-                    <div id="c-disp" class="text-white text-7xl font-light text-right mb-10">0</div>
-                    <div class="grid grid-cols-4 gap-4">...</div>
-                </div>`;
-            } else if (id === 'notes') {
+                modal.style.background = "linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%)";
+                title.innerText = "Unit Converter";
+                content.innerHTML = `
+                    <div class="space-y-8 flex-1">
+                        <div class="flex gap-2">
+                            <button onclick="window.changeUnitCat('length')" class="flex-1 p-3 glass rounded-xl text-xs font-black">LENGTH</button>
+                            <button onclick="window.changeUnitCat('weight')" class="flex-1 p-3 glass rounded-xl text-xs font-black">WEIGHT</button>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="space-y-2">
+                                <select id="unit-from" onchange="window.runConvert()"></select>
+                                <input type="number" id="unit-val-from" oninput="window.runConvert()" value="1" class="unit-input">
+                            </div>
+                            <div class="flex justify-center"><i data-lucide="arrow-down-up" class="opacity-50"></i></div>
+                            <div class="space-y-2">
+                                <select id="unit-to" onchange="window.runConvert()"></select>
+                                <input type="number" id="unit-val-to" readonly class="unit-input opacity-70 bg-transparent">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                window.changeUnitCat('length');
+            } else if (id === 'about') {
+                modal.style.background = "linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)";
+                title.innerText = "App Details";
+                content.innerHTML = `
+                    <div class="flex-1 flex flex-col items-center justify-center space-y-8">
+                        <div class="w-24 h-24 bg-blue-500/20 rounded-[40px] flex items-center justify-center shadow-2xl border border-blue-400/30">
+                             <i data-lucide="package" class="w-12 h-12 text-blue-400"></i>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <h2 class="text-3xl font-black tracking-tighter">Smart Tools Pro</h2>
+                            <p class="text-xs font-bold opacity-50 uppercase tracking-[0.3em]">Version 3.0.1 Stable</p>
+                        </div>
+                        <div class="w-full space-y-4">
+                            <div class="p-6 glass rounded-[30px] flex flex-col items-center">
+                                <span class="text-[10px] font-black opacity-40 uppercase">Designed & Developed By</span>
+                                <span class="text-2xl font-black text-blue-400 creator-glow">SHOJIB AHMED</span>
+                            </div>
+                            <div class="p-6 glass rounded-[30px] text-center">
+                                <p class="text-sm font-medium leading-relaxed opacity-70">A premium all-in-one utility suite designed for high-performance mobile hybrid experiences.</p>
+                            </div>
+                        </div>
+                        <div class="pt-4 opacity-30 text-[9px] font-bold">© 2024 OneClick Studio Hybrid Engine</div>
+                    </div>
+                `;
+            } else if (id === 'pass') {
+                modal.style.background = "#064e3b";
+                title.innerText = "Pass Generator";
+                content.innerHTML = `
+                    <div class="flex-1 flex flex-col justify-center space-y-12">
+                        <div class="p-10 glass rounded-[40px] break-all text-center">
+                            <div id="pass-output" class="text-2xl font-mono font-bold tracking-widest">SMART-77</div>
+                        </div>
+                        <button onclick="window.runPassGen()" class="w-full h-20 bg-emerald-400 text-emerald-950 rounded-[30px] font-black text-xl shadow-xl active:scale-95 transition">GENERATE</button>
+                    </div>
+                `;
+            } else if (id === 'qr') {
+                modal.style.background = "#4c1d95";
+                title.innerText = "QR Creator";
+                content.innerHTML = `
+                    <div class="space-y-6">
+                        <input type="text" id="qr-val" placeholder="Enter text..." class="w-full p-6 glass rounded-[30px] outline-none text-xl font-bold">
+                        <button onclick="window.runQR()" class="w-full h-16 bg-white text-purple-900 rounded-[24px] font-black">GENERATE QR</button>
+                        <div id="qr-container" class="hidden p-6 bg-white rounded-[40px] flex justify-center">
+                            <img id="qr-img" src="" alt="QR">
+                        </div>
+                    </div>
+                `;
+            } else {
+                modal.style.background = "#b45309";
                 title.innerText = "Quick Notes";
-                actions.innerHTML = `<button onclick="window.addNote()" class="p-2.5 bg-emerald-500 text-white rounded-xl"><i data-lucide="plus"></i></button>`;
-                window.renderNotes();
+                content.innerHTML = `
+                    <div class="flex-1 flex flex-col h-full">
+                        <textarea id="note-box" class="flex-1 glass p-8 rounded-[40px] outline-none text-xl font-medium placeholder:text-white/30 mb-6 resize-none" placeholder="Write here..."></textarea>
+                        <button onclick="window.saveNote()" class="w-full h-20 bg-white text-amber-900 rounded-[30px] font-black text-xl">SAVE</button>
+                    </div>
+                `;
+                document.getElementById('note-box').value = localStorage.getItem('h_note') || "";
             }
             lucide.createIcons();
         };
 
-        window.closeTool = () => { 
-            window.vibrate(); 
-            document.getElementById('tool-view').classList.add('translate-y-full');
-        };
+        window.closeTool = () => document.getElementById('tool-modal').classList.remove('open');
 
-        window.setBMISystem = (sys) => {
-            bmiSystem = sys;
-            const inputs = document.getElementById('bmi-inputs');
-            const bM = document.getElementById('btn-metric');
-            const bI = document.getElementById('btn-imperial');
-            
-            const activeClass = "flex-1 py-4 rounded-2xl text-xs font-black tracking-widest transition-all bg-white shadow-lg text-rose-600";
-            const inactiveClass = "flex-1 py-4 rounded-2xl text-xs font-black tracking-widest transition-all text-slate-500";
-
-            if (sys === 'metric') {
-                bM.className = activeClass; bI.className = inactiveClass;
-                inputs.innerHTML = `
-                    <div class="bg-white p-6 rounded-[32px] border-2 border-transparent focus-within:border-rose-400 transition-all shadow-sm">
-                        <label class="text-[10px] font-black uppercase text-rose-400 tracking-widest">Height (cm)</label>
-                        <input type="number" id="bmi-h" class="bg-transparent w-full text-2xl font-black mt-2 outline-none text-slate-900" placeholder="175">
-                    </div>
-                    <div class="bg-white p-6 rounded-[32px] border-2 border-transparent focus-within:border-rose-400 transition-all shadow-sm">
-                        <label class="text-[10px] font-black uppercase text-rose-400 tracking-widest">Weight (kg)</label>
-                        <input type="number" id="bmi-w" class="bg-transparent w-full text-2xl font-black mt-2 outline-none text-slate-900" placeholder="70">
-                    </div>`;
-            } else {
-                bI.className = activeClass; bM.className = inactiveClass;
-                inputs.innerHTML = `
-                    <div class="bg-white p-6 rounded-[32px] border-2 border-transparent focus-within:border-rose-400 transition-all shadow-sm col-span-1">
-                        <label class="text-[10px] font-black uppercase text-rose-400 tracking-widest">Height (Ft)</label>
-                        <input type="number" id="bmi-h-ft" class="bg-transparent w-full text-2xl font-black mt-2 outline-none text-slate-900" placeholder="5">
-                    </div>
-                    <div class="bg-white p-6 rounded-[32px] border-2 border-transparent focus-within:border-rose-400 transition-all shadow-sm col-span-1">
-                        <label class="text-[10px] font-black uppercase text-rose-400 tracking-widest">Inches</label>
-                        <input type="number" id="bmi-h-in" class="bg-transparent w-full text-2xl font-black mt-2 outline-none text-slate-900" placeholder="9">
-                    </div>
-                    <div class="bg-white p-6 rounded-[32px] border-2 border-transparent focus-within:border-rose-400 transition-all shadow-sm col-span-2">
-                        <label class="text-[10px] font-black uppercase text-rose-400 tracking-widest">Weight (lbs)</label>
-                        <input type="number" id="bmi-w-lb" class="bg-transparent w-full text-2xl font-black mt-2 outline-none text-slate-900" placeholder="150">
-                    </div>`;
-            }
-        };
-
-        window.calcBMI = () => {
+        window.handleCalc = (v) => {
             window.vibrate();
-            let h, w;
-            if (bmiSystem === 'metric') {
-                h = parseFloat(document.getElementById('bmi-h').value) / 100;
-                w = parseFloat(document.getElementById('bmi-w').value);
+            const d = document.getElementById('calc-disp');
+            if (v === 'C') currentExpr = "0";
+            else if (v === 'del') currentExpr = currentExpr.slice(0, -1) || "0";
+            else if (v === '=') {
+                try { currentExpr = eval(currentExpr.replace('÷','/').replace('×','*')).toString(); }
+                catch { currentExpr = "Error"; }
             } else {
-                const ft = parseFloat(document.getElementById('bmi-h-ft').value) || 0;
-                const inc = parseFloat(document.getElementById('bmi-h-in').value) || 0;
-                h = ((ft * 12) + inc) * 0.0254;
-                w = parseFloat(document.getElementById('bmi-w-lb').value) * 0.453592;
+                if (currentExpr === "0" || currentExpr === "Error") currentExpr = v;
+                else currentExpr += v;
+            }
+            d.innerText = currentExpr;
+        };
+
+        window.runAgeCalc = () => {
+            window.vibrate();
+            const birthDate = new Date(document.getElementById('age-input').value);
+            if (isNaN(birthDate)) return;
+            const today = new Date();
+            
+            let years = today.getFullYear() - birthDate.getFullYear();
+            let months = today.getMonth() - birthDate.getMonth();
+            let days = today.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
             }
 
-            if (!h || !w) return;
-            const bmi = (w / (h * h)).toFixed(1);
-            const card = document.getElementById('bmi-res-card');
-            const val = document.getElementById('bmi-val');
-            const stat = document.getElementById('bmi-status');
-            const ptr = document.getElementById('bmi-pointer');
-
-            card.classList.remove('hidden');
-            setTimeout(() => card.classList.remove('scale-95'), 50);
-            val.innerText = bmi;
-
-            let color, text, pct;
-            if (bmi < 18.5) { color = '#60a5fa'; text = 'UNDERWEIGHT'; pct = '10%'; }
-            else if (bmi < 25) { color = '#10b981'; text = 'HEALTHY'; pct = '40%'; }
-            else if (bmi < 30) { color = '#f59e0b'; text = 'OVERWEIGHT'; pct = '70%'; }
-            else { color = '#ef4444'; text = 'OBESE'; pct = '90%'; }
-
-            card.style.borderColor = color + '40';
-            val.style.color = color;
-            stat.innerText = text;
-            stat.style.backgroundColor = color;
-            ptr.style.left = pct;
-            card.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            document.getElementById('res-y').innerText = years;
+            document.getElementById('res-m').innerText = months;
+            document.getElementById('res-d').innerText = days;
         };
 
-        window.renderNotes = () => {
-            const cont = document.getElementById('tool-content');
-            if (notes.length === 0) cont.innerHTML = `<div class="p-20 text-center opacity-20"><i data-lucide="sticky-note" class="mx-auto w-16 h-16"></i><p class="mt-4 font-bold uppercase tracking-widest text-xs">Empty</p></div>`;
-            else cont.innerHTML = `<div class="p-4 space-y-4">` + notes.map((n, i) => `<div class="bg-white p-6 rounded-[32px] border border-slate-100 flex justify-between items-center shadow-sm"><div class="flex-1 pr-4"><p class="font-bold text-slate-800">${n.text}</p></div><button onclick="window.delNote(${i})" class="w-10 h-10 bg-rose-50 text-rose-400 rounded-xl flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('') + `</div>`;
-            lucide.createIcons();
+        let currentCat = 'length';
+        window.changeUnitCat = (cat) => {
+            currentCat = cat;
+            const from = document.getElementById('unit-from');
+            const to = document.getElementById('unit-to');
+            from.innerHTML = to.innerHTML = "";
+            Object.keys(units[cat]).forEach(u => {
+                from.innerHTML += `<option value="${u}">${u.toUpperCase()}</option>`;
+                to.innerHTML += `<option value="${u}">${u.toUpperCase()}</option>`;
+            });
+            window.runConvert();
         };
 
-        window.addNote = () => { const t = prompt("Note Content:"); if (t) { notes.unshift({ text: t }); localStorage.setItem('smart_notes', JSON.stringify(notes)); window.renderNotes(); } };
-        window.delNote = (i) => { notes.splice(i, 1); localStorage.setItem('smart_notes', JSON.stringify(notes)); window.renderNotes(); window.vibrate(); };
+        window.runConvert = () => {
+            const val = parseFloat(document.getElementById('unit-val-from').value) || 0;
+            const fromU = document.getElementById('unit-from').value;
+            const toU = document.getElementById('unit-to').value;
+            let res = 0;
+            
+            if(currentCat === 'temp') {
+                if(fromU === 'c' && toU === 'f') res = (val * 9/5) + 32;
+                else if(fromU === 'f' && toU === 'c') res = (val - 32) * 5/9;
+                else res = val;
+            } else {
+                const base = val / units[currentCat][fromU];
+                res = base * units[currentCat][toU];
+            }
+            document.getElementById('unit-val-to').value = res.toFixed(2);
+        };
+
+        window.runPassGen = () => {
+            window.vibrate();
+            const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789!@#$%^&*";
+            let res = "";
+            for(let i=0; i<10; i++) res += chars.charAt(Math.floor(Math.random()*chars.length));
+            document.getElementById('pass-output').innerText = res;
+        };
+
+        window.runQR = () => {
+            const val = document.getElementById('qr-val').value;
+            if(!val) return;
+            document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(val)}`;
+            document.getElementById('qr-container').classList.remove('hidden');
+        };
+
+        window.saveNote = () => {
+            localStorage.setItem('h_note', document.getElementById('note-box').value);
+            window.closeTool();
+        };
     </script>
 </body>
 </html>
