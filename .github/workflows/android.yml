@@ -36,7 +36,15 @@ jobs:
           fi
           
           # 3. Sync web assets
-          find . -maxdepth 3 -type f             -not -path '*/.*'             -not -name "package*"             -not -name "tsconfig*"             -not -name "vite.config.ts"             -not -name "capacitor.config.json"             -not -path "./android/*"             -not -path "./node_modules/*"             -exec cp --parents "{}" www/ ';'
+          find . -maxdepth 3 -type f \
+            -not -path '*/.*' \
+            -not -name "package*" \
+            -not -name "tsconfig*" \
+            -not -name "vite.config.ts" \
+            -not -name "capacitor.config.json" \
+            -not -path "./android/*" \
+            -not -path "./node_modules/*" \
+            -exec cp --parents "{}" www/ ';'
           
           # 4. Setup Project
           if [ ! -f package.json ]; then
@@ -54,7 +62,7 @@ jobs:
           # 7. Add Android Platform
           npx cap add android
           
-          # 8. Gradle Fixes
+          # 8. Gradle Fixes - Explicit Echo (NO CAT/EOF)
           echo "android.enableJetifier=true" >> android/gradle.properties
           echo "android.useAndroidX=true" >> android/gradle.properties
           
@@ -62,27 +70,24 @@ jobs:
           sed -i 's/JavaVersion.VERSION_11/JavaVersion.VERSION_21/g' android/app/build.gradle
           sed -i 's/JavaVersion.VERSION_1_8/JavaVersion.VERSION_21/g' android/app/build.gradle
           
-          # Inject configurations with correct bash echo syntax
-          cat <<EOF >> android/app/build.gradle
-android {
-    packagingOptions {
-        resources {
-            pickFirst 'META-INF/kotlin-stdlib.kotlin_module'
-            pickFirst 'META-INF/kotlin-stdlib-jdk8.kotlin_module'
-            pickFirst 'META-INF/kotlin-stdlib-jdk7.kotlin_module'
-        }
-    }
-}
-
-configurations.all {
-    resolutionStrategy {
-        force 'org.jetbrains.kotlin:kotlin-stdlib:1.9.10'
-        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10'
-        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10'
-        force 'com.android.support:support-v4:28.0.0'
-    }
-}
-EOF
+          echo "android {" >> android/app/build.gradle
+          echo "    packagingOptions {" >> android/app/build.gradle
+          echo "        resources {" >> android/app/build.gradle
+          echo "            pickFirst 'META-INF/kotlin-stdlib.kotlin_module'" >> android/app/build.gradle
+          echo "            pickFirst 'META-INF/kotlin-stdlib-jdk8.kotlin_module'" >> android/app/build.gradle
+          echo "            pickFirst 'META-INF/kotlin-stdlib-jdk7.kotlin_module'" >> android/app/build.gradle
+          echo "        }" >> android/app/build.gradle
+          echo "    }" >> android/app/build.gradle
+          echo "}" >> android/app/build.gradle
+          
+          echo "configurations.all {" >> android/app/build.gradle
+          echo "    resolutionStrategy {" >> android/app/build.gradle
+          echo "        force 'org.jetbrains.kotlin:kotlin-stdlib:1.9.10'" >> android/app/build.gradle
+          echo "        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10'" >> android/app/build.gradle
+          echo "        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10'" >> android/app/build.gradle
+          echo "        force 'com.android.support:support-v4:28.0.0'" >> android/app/build.gradle
+          echo "    }" >> android/app/build.gradle
+          echo "}" >> android/app/build.gradle
 
           npx cap copy android
           
