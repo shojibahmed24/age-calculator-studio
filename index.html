@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Smart Tools v2.5 Ultra</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        
+        :root { --primary: #6366f1; }
+        body { 
+            background-color: #f8fafc; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+            height: 100dvh; 
+            width: 100vw; 
+            overflow: hidden;
+        }
+
+        .premium-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%), rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px) saturate(200%);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+        }
+
+        .premium-text {
+            background: linear-gradient(to right, #6366f1, #a855f7, #ec4899, #6366f1);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-text 3s linear infinite;
+        }
+
+        @keyframes gradient-text {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .bento-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        .bento-card:active { transform: scale(0.94); opacity: 0.9; }
+
+        .glass-view { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); }
+        .safe-area-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem); }
+        .safe-area-top { padding-top: env(safe-area-inset-top); }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+
+        .unit-select { appearance: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236366f1' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 1rem center; background-size: 1rem; }
+
+        @keyframes pulse-ring { 0% { transform: scale(.33); opacity: 1; } 80%, 100% { opacity: 0; } }
+        .animate-ring { animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+    </style>
+</head>
+<body class="flex flex-col">
+
+    <div id="app-container" class="flex-1 flex flex-col h-full">
+        
+        <header class="p-6 pb-5 premium-header safe-area-top z-30">
+            <div class="flex justify-between items-center">
+                <div class="space-y-0.5">
+                    <h1 class="text-2xl font-extrabold premium-text tracking-tighter">Smart Tools</h1>
+                    <p class="text-[9px] font-black uppercase tracking-[0.25em] text-slate-500 flex items-center">
+                        <span class="relative flex h-2 w-2 mr-2">
+                          <span class="animate-ring absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                        </span>
+                        SYSTEM ENGINE v2.5
+                    </p>
+                </div>
+                <button onclick="window.showSettings()" class="w-11 h-11 bg-white shadow-lg shadow-indigo-100/50 rounded-2xl flex items-center justify-center border border-indigo-50 active:scale-90 transition">
+                    <i data-lucide="layout-grid" class="w-5 h-5 text-indigo-600"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 space-y-4 hide-scroll">
+            <div class="grid grid-cols-2 gap-4 pb-24">
+                
+                <div onclick="window.showTool('calc')" class="bento-card col-span-1 h-44 bg-gradient-to-br from-indigo-600 to-blue-700 rounded-[38px] p-6 text-white flex flex-col justify-between shadow-xl shadow-indigo-100">
+                    <div class="w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center"><i data-lucide="calculator" class="w-5 h-5"></i></div>
+                    <span class="font-bold text-lg">Calculator</span>
+                </div>
+
+                <div onclick="window.showTool('notes')" class="bento-card col-span-1 h-44 bg-emerald-500 rounded-[38px] p-6 text-white flex flex-col justify-between shadow-xl shadow-emerald-100">
+                    <div class="w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center"><i data-lucide="edit-3" class="w-5 h-5"></i></div>
+                    <span class="font-bold text-lg">Quick Notes</span>
+                </div>
+
+                <div onclick="window.showTool('unit')" class="bento-card col-span-2 h-36 bg-violet-600 rounded-[40px] p-6 text-white flex items-center justify-between shadow-xl shadow-violet-100">
+                    <div class="flex flex-col">
+                        <span class="font-bold text-xl">Unit Switch</span>
+                        <span class="text-white/80 text-xs">Universal Conversions Engine</span>
+                    </div>
+                    <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
+                        <i data-lucide="refresh-cw" class="w-8 h-8"></i>
+                    </div>
+                </div>
+
+                <div onclick="window.showTool('time')" class="bento-card col-span-1 h-40 bg-amber-500 rounded-[38px] p-6 text-white flex flex-col justify-between shadow-xl shadow-amber-100">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center"><i data-lucide="timer" class="w-5 h-5"></i></div>
+                    <span class="font-bold text-lg">Time Master</span>
+                </div>
+
+                <div onclick="window.showTool('pass')" class="bento-card col-span-1 h-40 bg-slate-800 rounded-[38px] p-6 text-white flex flex-col justify-between shadow-xl shadow-slate-200">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+                    <span class="font-bold text-lg">Vault Gen</span>
+                </div>
+
+                <div onclick="window.showTool('bmi')" class="bento-card col-span-2 h-32 bg-rose-500 rounded-[38px] p-6 text-white flex items-center justify-between shadow-xl shadow-rose-100">
+                    <div class="flex flex-col">
+                        <span class="font-bold text-xl">BMI Analysis</span>
+                        <span class="text-white/80 text-xs">Health metrics tracker</span>
+                    </div>
+                    <i data-lucide="activity" class="w-10 h-10 opacity-30"></i>
+                </div>
+            </div>
+        </main>
+
+        <div id="tool-view" class="absolute inset-0 bg-slate-50 z-50 translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col">
+            <div class="p-4 flex items-center justify-between bg-white border-b safe-area-top">
+                <button onclick="window.closeTool()" class="p-3 bg-slate-50 rounded-2xl active:scale-90 transition">
+                    <i data-lucide="chevron-down" class="w-6 h-6 text-slate-800"></i>
+                </button>
+                <h2 id="tool-title" class="text-lg font-bold text-slate-800">Tool</h2>
+                <div id="tool-actions" class="flex gap-2"></div>
+            </div>
+            <div id="tool-content" class="flex-1 overflow-y-auto hide-scroll"></div>
+        </div>
+
+        <div id="settings-view" class="absolute inset-0 bg-white z-[60] translate-x-full transition-transform duration-400 ease-out flex flex-col">
+            <div class="p-6 flex items-center justify-between border-b safe-area-top">
+                <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">App Info</h2>
+                <button onclick="window.closeSettings()" class="p-2 bg-slate-100 rounded-full">
+                    <i data-lucide="x" class="w-6 h-6 text-slate-600"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-6 flex-1 overflow-y-auto">
+                <div class="p-8 bg-slate-900 rounded-[40px] text-center">
+                    <div class="premium-text text-3xl font-black mb-1">SMART TOOLS</div>
+                    <p class="text-slate-500 text-[10px] font-bold tracking-[0.3em]">VERSION 2.5 PRO</p>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed text-center">This utility suite is optimized for performance and security. All data is stored locally on your device.</p>
+            </div>
+        </div>
+
+        <footer class="bg-white border-t flex flex-col items-center justify-center safe-area-bottom">
+            <div class="w-full h-12 flex items-center justify-center">
+                <div class="text-[9px] text-slate-300 font-bold uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full">
+                    ca-app-pub-3983978968056123~6473376448
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        let notes = JSON.parse(localStorage.getItem('smart_notes') || '[]');
+        let stopwatchInterval;
+        let swTime = 0;
+
+        window.onload = () => { lucide.createIcons(); };
+
+        window.vibrate = () => {
+            if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(25);
+        };
+
+        window.showSettings = () => {
+            window.vibrate();
+            document.getElementById('settings-view').classList.remove('translate-x-full');
+        };
+
+        window.closeSettings = () => {
+            window.vibrate();
+            document.getElementById('settings-view').classList.add('translate-x-full');
+        };
+
+        window.showTool = (id) => {
+            window.vibrate();
+            const view = document.getElementById('tool-view');
+            const content = document.getElementById('tool-content');
+            const title = document.getElementById('tool-title');
+            const actions = document.getElementById('tool-actions');
+            
+            view.classList.remove('translate-y-full');
+            actions.innerHTML = '';
+
+            if (id === 'unit') {
+                title.innerText = "Unit Switch";
+                content.innerHTML = `
+                <div class="p-6 space-y-6">
+                    <div class="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Category</label>
+                        <select id="unit-cat" onchange="window.updateUnitOptions()" class="w-full mt-2 text-lg font-bold text-indigo-600 outline-none unit-select">
+                            <option value="len">Length</option>
+                            <option value="weight">Weight</option>
+                            <option value="temp">Temperature</option>
+                        </select>
+                    </div>
+                    <div class="bg-indigo-600 p-8 rounded-[40px] text-white shadow-xl">
+                        <input type="number" id="unit-input" oninput="window.convertUnits()" value="1" class="bg-transparent text-5xl font-black w-full outline-none placeholder-white/50">
+                        <select id="unit-from" onchange="window.convertUnits()" class="mt-4 bg-white/20 text-xs font-bold rounded-full px-4 py-2 outline-none border-none"></select>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center"><i data-lucide="move-down" class="text-slate-400"></i></div>
+                    </div>
+                    <div class="bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm">
+                        <div id="unit-output" class="text-5xl font-black text-slate-800">1</div>
+                        <select id="unit-to" onchange="window.convertUnits()" class="mt-4 bg-slate-100 text-indigo-600 text-xs font-bold rounded-full px-4 py-2 outline-none border-none"></select>
+                    </div>
+                </div>`;
+                window.updateUnitOptions();
+            } else if (id === 'time') {
+                title.innerText = "Time Master";
+                content.innerHTML = `
+                <div class="p-6 space-y-6">
+                    <div class="bg-slate-900 h-64 rounded-[40px] flex flex-col items-center justify-center text-white shadow-2xl">
+                        <div id="sw-display" class="text-6xl font-mono tracking-tighter">00:00.00</div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-4">Stopwatch Pro</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button id="sw-toggle" onclick="window.toggleSW()" class="p-6 bg-amber-500 rounded-[32px] text-white font-black text-lg shadow-xl active:scale-95 transition">Start</button>
+                        <button onclick="window.resetSW()" class="p-6 bg-slate-200 rounded-[32px] text-slate-600 font-black text-lg active:scale-95 transition">Reset</button>
+                    </div>
+                </div>`;
+            } else if (id === 'calc') {
+                title.innerText = "Calculator";
+                content.innerHTML = `<div class="h-full bg-slate-950 p-6 flex flex-col">
+                    <div class="flex-1 flex flex-col justify-end items-end pb-8">
+                        <div id="c-disp" class="text-white text-7xl font-light tracking-tighter">0</div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-3">
+                        <button onclick="window.calc('AC')" class="h-16 rounded-3xl bg-slate-800 text-emerald-400 font-bold">AC</button>
+                        <button onclick="window.calc('/')" class="h-16 rounded-3xl bg-indigo-500 text-white">÷</button>
+                        <button onclick="window.calc('*')" class="h-16 rounded-3xl bg-indigo-500 text-white">×</button>
+                        <button onclick="window.calc('DEL')" class="h-16 rounded-3xl bg-slate-800 text-white flex items-center justify-center"><i data-lucide="delete"></i></button>
+                        <button onclick="window.calc('7')" class="h-16 rounded-3xl bg-white/5 text-white">7</button>
+                        <button onclick="window.calc('8')" class="h-16 rounded-3xl bg-white/5 text-white">8</button>
+                        <button onclick="window.calc('9')" class="h-16 rounded-3xl bg-white/5 text-white">9</button>
+                        <button onclick="window.calc('-')" class="h-16 rounded-3xl bg-indigo-500 text-white">-</button>
+                        <button onclick="window.calc('4')" class="h-16 rounded-3xl bg-white/5 text-white">4</button>
+                        <button onclick="window.calc('5')" class="h-16 rounded-3xl bg-white/5 text-white">5</button>
+                        <button onclick="window.calc('6')" class="h-16 rounded-3xl bg-white/5 text-white">6</button>
+                        <button onclick="window.calc('+')" class="h-16 rounded-3xl bg-indigo-500 text-white">+</button>
+                        <button onclick="window.calc('1')" class="h-16 rounded-3xl bg-white/5 text-white">1</button>
+                        <button onclick="window.calc('2')" class="h-16 rounded-3xl bg-white/5 text-white">2</button>
+                        <button onclick="window.calc('3')" class="h-16 rounded-3xl bg-white/5 text-white">3</button>
+                        <button onclick="window.calc('=')" class="h-16 rounded-3xl bg-emerald-500 text-white font-bold">=</button>
+                    </div>
+                </div>`;
+            } else if (id === 'notes') {
+                title.innerText = "Quick Notes";
+                actions.innerHTML = `<button onclick="window.addNote()" class="p-2.5 bg-emerald-500 text-white rounded-xl"><i data-lucide="plus"></i></button>`;
+                window.renderNotes();
+            } else if (id === 'pass') {
+                title.innerText = "Vault Password";
+                content.innerHTML = `<div class="p-8 space-y-8">
+                    <div class="bg-slate-900 p-8 rounded-[40px] text-center">
+                        <div id="pass-display" class="text-emerald-400 text-2xl font-mono tracking-widest break-all">••••••••</div>
+                    </div>
+                    <input type="range" id="pass-len" min="8" max="32" value="12" class="w-full accent-indigo-600">
+                    <button onclick="window.genPass()" class="w-full p-6 bg-slate-900 rounded-[32px] text-white font-extrabold">Generate Secure Pass</button>
+                </div>`;
+            } else if (id === 'bmi') {
+                title.innerText = "BMI Analysis";
+                content.innerHTML = `<div class="p-8 space-y-6">
+                    <input type="number" id="bmi-h" class="w-full p-6 rounded-3xl border text-xl" placeholder="Height (cm)">
+                    <input type="number" id="bmi-w" class="w-full p-6 rounded-3xl border text-xl" placeholder="Weight (kg)">
+                    <button onclick="window.calcBMI()" class="w-full p-6 bg-rose-500 rounded-[32px] text-white font-extrabold">Calculate</button>
+                    <div id="bmi-res" class="hidden text-center p-8 bg-white rounded-[40px] border shadow-sm">
+                        <span class="block text-5xl font-black text-rose-500" id="bmi-val">0.0</span>
+                    </div>
+                </div>`;
+            }
+            lucide.createIcons();
+        };
+
+        window.closeTool = () => {
+            window.vibrate();
+            document.getElementById('tool-view').classList.add('translate-y-full');
+            clearInterval(stopwatchInterval);
+        };
+
+        // --- UNIT CONVERTER LOGIC ---
+        const units = {
+            len: { "Meter": 1, "Kilometer": 0.001, "Centimeter": 100, "Inch": 39.3701, "Foot": 3.28084 },
+            weight: { "Kilogram": 1, "Gram": 1000, "Pound": 2.20462, "Ounce": 35.274 },
+            temp: { "Celsius": "c", "Fahrenheit": "f", "Kelvin": "k" }
+        };
+
+        window.updateUnitOptions = () => {
+            const cat = document.getElementById('unit-cat').value;
+            const from = document.getElementById('unit-from');
+            const to = document.getElementById('unit-to');
+            const options = Object.keys(units[cat]);
+            from.innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join('');
+            to.innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join('');
+            window.convertUnits();
+        };
+
+        window.convertUnits = () => {
+            const cat = document.getElementById('unit-cat').value;
+            const val = parseFloat(document.getElementById('unit-input').value) || 0;
+            const from = document.getElementById('unit-from').value;
+            const to = document.getElementById('unit-to').value;
+            let res = 0;
+
+            if (cat === 'temp') {
+                let celsius = val;
+                if (from === "Fahrenheit") celsius = (val - 32) * 5/9;
+                if (from === "Kelvin") celsius = val - 273.15;
+                
+                if (to === "Celsius") res = celsius;
+                else if (to === "Fahrenheit") res = (celsius * 9/5) + 32;
+                else res = celsius + 273.15;
+            } else {
+                const base = val / units[cat][from];
+                res = base * units[cat][to];
+            }
+            document.getElementById('unit-output').innerText = res.toLocaleString(undefined, {maximumFractionDigits: 4});
+        };
+
+        // --- STOPWATCH LOGIC ---
+        window.toggleSW = () => {
+            window.vibrate();
+            const btn = document.getElementById('sw-toggle');
+            if (stopwatchInterval) {
+                clearInterval(stopwatchInterval);
+                stopwatchInterval = null;
+                btn.innerText = "Start";
+                btn.className = btn.className.replace('bg-rose-500', 'bg-amber-500');
+            } else {
+                const start = Date.now() - swTime;
+                stopwatchInterval = setInterval(() => {
+                    swTime = Date.now() - start;
+                    const m = Math.floor(swTime / 60000).toString().padStart(2, '0');
+                    const s = Math.floor((swTime % 60000) / 1000).toString().padStart(2, '0');
+                    const ms = Math.floor((swTime % 1000) / 10).toString().padStart(2, '0');
+                    document.getElementById('sw-display').innerText = `${m}:${s}.${ms}`;
+                }, 10);
+                btn.innerText = "Stop";
+                btn.className = btn.className.replace('bg-amber-500', 'bg-rose-500');
+            }
+        };
+
+        window.resetSW = () => {
+            window.vibrate();
+            clearInterval(stopwatchInterval);
+            stopwatchInterval = null;
+            swTime = 0;
+            document.getElementById('sw-display').innerText = "00:00.00";
+            document.getElementById('sw-toggle').innerText = "Start";
+            document.getElementById('sw-toggle').className = document.getElementById('sw-toggle').className.replace('bg-rose-500', 'bg-amber-500');
+        };
+
+        // --- OTHER LOGIC ---
+        window.calcBMI = () => {
+            const h = document.getElementById('bmi-h').value / 100;
+            const w = document.getElementById('bmi-w').value;
+            if (!h || !w) return;
+            const bmi = (w / (h * h)).toFixed(1);
+            document.getElementById('bmi-val').innerText = bmi;
+            document.getElementById('bmi-res').classList.remove('hidden');
+            window.vibrate();
+        };
+
+        window.genPass = () => {
+            const len = document.getElementById('pass-len').value;
+            const chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%";
+            let pass = "";
+            for (let i = 0; i < len; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            document.getElementById('pass-display').innerText = pass;
+            window.vibrate();
+        };
+
+        let cVal = "0";
+        window.calc = (a) => {
+            const d = document.getElementById('c-disp');
+            if (a === 'AC') cVal = "0";
+            else if (a === 'DEL') cVal = cVal.length > 1 ? cVal.slice(0, -1) : "0";
+            else if (a === '=') try { cVal = eval(cVal).toString(); } catch { cVal = "Error"; }
+            else { if (cVal === "0") cVal = a; else cVal += a; }
+            d.innerText = cVal;
+            window.vibrate();
+        };
+
+        window.renderNotes = () => {
+            const cont = document.getElementById('tool-content');
+            if (notes.length === 0) {
+                cont.innerHTML = `<div class="p-20 text-center opacity-20"><i data-lucide="sticky-note" class="mx-auto w-16 h-16"></i><p class="mt-4 font-bold uppercase tracking-widest text-xs">Empty Vault</p></div>`;
+            } else {
+                cont.innerHTML = `<div class="p-4 space-y-4">` + notes.map((n, i) => `
+                    <div class="bg-white p-6 rounded-[32px] border border-slate-100 flex justify-between items-center">
+                        <div class="flex-1 pr-4"><p class="font-bold text-slate-800">${n.text}</p></div>
+                        <button onclick="window.delNote(${i})" class="w-10 h-10 bg-rose-50 text-rose-400 rounded-xl flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                `).join('') + `</div>`;
+            }
+            lucide.createIcons();
+        };
+
+        window.addNote = () => {
+            const t = prompt("Note Content:");
+            if (t) {
+                notes.unshift({ text: t, date: new Date().toLocaleDateString() });
+                localStorage.setItem('smart_notes', JSON.stringify(notes));
+                window.renderNotes();
+            }
+        };
+
+        window.delNote = (i) => {
+            notes.splice(i, 1);
+            localStorage.setItem('smart_notes', JSON.stringify(notes));
+            window.renderNotes();
+            window.vibrate();
+        };
+    </script>
+</body>
+</html>
