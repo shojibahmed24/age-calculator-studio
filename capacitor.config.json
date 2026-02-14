@@ -1,0 +1,6 @@
+{
+  "appId": "com.age_calculator",
+  "appName": "Age-Calculator",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
